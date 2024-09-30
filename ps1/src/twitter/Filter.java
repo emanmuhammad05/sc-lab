@@ -1,18 +1,10 @@
-/* Copyright (c) 2007-2016 MIT 6.005 course staff, all rights reserved.
- * Redistribution of original or derived work requires permission of course staff.
- */
 package twitter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * Filter consists of methods that filter a list of tweets for those matching a
- * condition.
- * 
- * DO NOT change the method signatures and specifications of these methods, but
- * you should implement their method bodies, and you may add new public or
- * private methods or classes if you like.
- */
+
 public class Filter {
 
     /**
@@ -27,7 +19,15 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> result = new ArrayList<>();
+        
+        for (Tweet tweet : tweets) {
+            if (tweet.getAuthor().equalsIgnoreCase(username)) {
+                result.add(tweet);
+            }
+        }
+        
+        return result;
     }
 
     /**
@@ -41,7 +41,16 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> result = new ArrayList<>();
+        
+        for (Tweet tweet : tweets) {
+            if (!tweet.getTimestamp().isBefore(timespan.getStart()) && 
+                !tweet.getTimestamp().isAfter(timespan.getEnd())) {
+                result.add(tweet);
+            }
+        }
+        
+        return result;
     }
 
     /**
@@ -60,7 +69,26 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
-    }
+        List<Tweet> result = new ArrayList<>();
+        List<String> lowerCaseWords = new ArrayList<>();
+        
+      
+        for (String word : words) {
+            lowerCaseWords.add(word.toLowerCase(Locale.ROOT));
+        }
 
+       
+        for (Tweet tweet : tweets) {
+            String tweetText = tweet.getText().toLowerCase(Locale.ROOT);
+            for (String word : lowerCaseWords) {
+                if (tweetText.contains(word)) {
+                    result.add(tweet);
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
 }
+
